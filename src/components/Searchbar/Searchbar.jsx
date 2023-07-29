@@ -11,6 +11,7 @@ import {
 export class Searchbar extends Component {
   state = {
     value: '',
+    previousValue: '',
   };
 
   handleInputChange = ({ target }) => {
@@ -19,7 +20,8 @@ export class Searchbar extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { value } = this.state;
+    const { value, previousValue } = this.state;
+
     if (value.trim() === '') {
       toast.info(
         'Sorry, but the search field cannot be empty, please enter your query'
@@ -27,8 +29,15 @@ export class Searchbar extends Component {
       return;
     }
 
+    if (value.trim() === previousValue.trim()) {
+      toast.info(
+        'Sorry, you have already sent this request before. Please enter a new request'
+      );
+      return;
+    }
+
     this.props.onSubmit(value);
-    this.setState({ value: '' });
+    this.setState({ previousValue: value });
   };
 
   render() {
